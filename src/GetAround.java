@@ -7,15 +7,13 @@ public class GetAround {
 
 	public static void main(String[] args) {
 		Scanner console = new Scanner(System.in);
-		LinkedList <Long> nums = new LinkedList <Long>();
-		LinkedList <String> ops = new LinkedList <String>();
-		String expression = console.nextLine();
-		long cur=0;
-		int index=0;
-		String remainder="";
+		LinkedList <Long> nums = new LinkedList <Long>();//List of integers in string an act as either a stack or a queue
+		LinkedList <String> ops = new LinkedList <String>();//List of operations in order of given string
+		String expression = console.nextLine();//Get the expression string from the user
+		long cur=0;//operations with multiplication or division
+		int index=0;//pointer in expression
 		while (index<expression.length()){
-			remainder= expression.substring(index, expression.length()-1);
-			if (expression.charAt(index)=='*'){
+			if (expression.charAt(index)=='*'){//handle multiplication
 				index++;
 				int startIndex = index;
 				while (index<expression.length() && Character.isDigit(expression.charAt(index))) {
@@ -23,9 +21,9 @@ public class GetAround {
 				}
 				long nextUp= Long.valueOf(expression.substring(startIndex,index));
 				cur=nums.pop()*nextUp;
-				nums.push(cur);
+				nums.push(cur);//push operation back on stack
 			}
-			else if (expression.charAt(index)=='/'){
+			else if (expression.charAt(index)=='/'){//handle division
 				index++;
 				int startIndex = index;
 				while (index<expression.length() && Character.isDigit(expression.charAt(index))) {
@@ -33,13 +31,13 @@ public class GetAround {
 				}
 				long nextUp= Long.valueOf(expression.substring(startIndex,index));
 				cur=nums.pop()/nextUp;
-				nums.push(cur);
+				nums.push(cur);//push operation back on stack
 			}
-			else if (expression.charAt(index)=='+'){
+			else if (expression.charAt(index)=='+'){//if addition just push to the stack and handle later
 				ops.push("+");
 				index++;
 			}
-			else if (expression.charAt(index)=='-'){
+			else if (expression.charAt(index)=='-'){//if subtraction just push to the stack and handle later
 				ops.push("-");
 				index++;
 			}
@@ -49,13 +47,11 @@ public class GetAround {
 					index++;
 				}
 				long nextUp= Long.valueOf(expression.substring(startIndex,index));
-				//System.out.println(nextUp);
 				nums.push(nextUp);
 			}
 			
 		}
-		int total=0;
-		while (nums.size()>1){
+		while (nums.size()>1){//handle remaining queues
 			if (ops.peekLast()=="+"){
 				ops.pollLast();
 				nums.add(nums.pollLast()+nums.pollLast());
